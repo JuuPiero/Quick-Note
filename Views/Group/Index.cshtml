@@ -1,0 +1,75 @@
+@model Group
+@{
+  Layout = "Dashboard/_Layout";
+  List<Group> groups = ViewBag.Groups;
+  var user = ViewBag.User;
+}
+
+<section class="section">
+    <div class="section-body">
+        <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4>Groups</h4>
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table table-striped" id="sortable-table">
+                        <thead>
+                          <tr>
+                            <th class="text-center">
+                              <i class="fas fa-th"></i>
+                            </th>
+                            <th>Name</th>
+                            <th>Owner</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody class="ui-sortable">
+                            
+                            @foreach (var group in groups) 
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="sort-handler ui-sortable-handle">
+                                            <i class="fas fa-th"></i>
+                                        </div>
+                                    </td>
+                                    <td>@group.Name</td>
+                                    <td>
+                                      @if(group.UserId == user.Id) {
+                                        <div class="badge badge-success">Yes</div>
+                                      }
+                                      else {
+                                        <div class="badge badge-danger">No</div>
+                                      }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Detail" asp-controller="Group" asp-route-id="@group.Id" class="btn btn-primary">Detail</a>
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/assets/js/app.min.js"></script>
+    <script src="~/assets/bundles/summernote/summernote-bs4.js"></script>
+    <script src="~/assets/bundles/codemirror/lib/codemirror.js"></script>
+    <script src="~/assets/bundles/codemirror/mode/javascript/javascript.js"></script>
+    <script src="~/assets/bundles/jquery-selectric/jquery.selectric.min.js"></script>
+    <script src="~/assets/bundles/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/assets/js/scripts.js"></script>
+    <script src="~/assets/js/page/advance-table.js"></script>
+
+}

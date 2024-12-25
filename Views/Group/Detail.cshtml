@@ -1,0 +1,151 @@
+@model Group
+@{
+    @* ViewData["Title"] = "Home Page"; *@
+    Layout = "Dashboard/_Layout";
+    var user = ViewBag.User;
+    var users = ViewBag.Users;
+    var notes = ViewBag.Notes;
+    var noteInGroups = ViewBag.NoteInGroups;
+}
+
+<section class="section">
+    <div class="section-body">
+        <div class="row">
+              <div class="col-12">
+                <div class="card">
+                    <div class="card-header justify-content-between">
+                        <h2>Group Detail</h2>
+                        @if(user.Id == Model.UserId) {
+                            <div>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add Member</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">Share note</button>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="card-body">
+                        <form method="post" asp-action="Store" asp-controller="Note">
+                            <div class="form-group">
+                                <label for="group-name">Name Group</label>
+                                <input id="group-name" value="@Model.Name" type="text" asp-for="Name" readonly class="form-control"/>
+                            </div>
+                            @* <button type="submit" class="btn btn-primary">Submit</button> *@
+                        </form>
+                    </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</section>
+
+<div class="text-center">
+    <h1 class="display-4">Shared Notes</h1>
+</div>
+
+<section class="section">
+
+    <div class="row ">
+        @foreach (Note note in noteInGroups) {
+            <a asp-action="Detail" asp-controller="Note" asp-route-id="@note.Id" class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="card">
+                    <div class="card-statistic-4">
+                        <div class="align-items-center justify-content-between">
+                        <div class="row ">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">@note.Title</h5>
+                                <strong class="mb-3 font-18">@Html.Raw(note.Content)</strong>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+     
+    </div>
+</section>
+
+@section Modals {
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="formModal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="formModal">Users</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        </div>
+        <div class="modal-body">
+        <form class="" asp-action="AddMembers" asp-controller="Group" asp-route-id="@Model.Id">
+            <div class="form-group mb-0">
+               
+                @foreach(var u in users) {
+                    <div class="custom-control custom-checkbox">
+                        @if(u.IsInGroup) {
+                            <input checked type="checkbox" name="userIds[]"  class="custom-control-input" value="@(u.User.Id)" id="Check@(u.User.Id)">
+                        }
+                        else {
+                            <input type="checkbox" name="userIds[]" class="custom-control-input" value="@(u.User.Id)" id="Check@(u.User.Id)">
+                        }
+                        <label class="custom-control-label" for="Check@(u.User.Id)">@u.User.Username</label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+ <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="formModal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="formModal">Notes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        </div>
+        <div class="modal-body">
+        <form method="post" asp-action="ShareNotes" asp-controller="Group" asp-route-id="@Model.Id">
+            <div class="form-group mb-0">
+               
+                @foreach(var n in notes) {
+                    <div class="custom-control custom-checkbox">
+                        @if(n.IsShared) {
+                            <input checked type="checkbox" name="noteIds[]"  class="custom-control-input" value="@(n.Note.Id)" id="CheckNote@(n.Note.Id)">
+                        }
+                        else {
+                            <input type="checkbox" name="noteIds[]" class="custom-control-input" value="@(n.Note.Id)" id="CheckNote@(n.Note.Id)">
+                        }
+                        <label class="custom-control-label" for="CheckNote@(n.Note.Id)">@n.Note.Title</label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+}
+
+@section Scripts {
+    <script src="~/assets/js/app.min.js"></script>
+
+    <!-- JS Libraies -->
+    <script src="~/assets/bundles/summernote/summernote-bs4.js"></script>
+    <script src="~/assets/bundles/codemirror/lib/codemirror.js"></script>
+    <script src="~/assets/bundles/codemirror/mode/javascript/javascript.js"></script>
+    <script src="~/assets/bundles/jquery-selectric/jquery.selectric.min.js"></script>
+    <script src="~/assets/bundles/prism/prism.js"></script>
+
+    <script src="~/assets/js/page/index.js"></script>
+    <!-- Template JS File -->
+    <script src="~/assets/js/scripts.js"></script>
+    
+}

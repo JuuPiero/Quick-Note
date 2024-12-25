@@ -1,0 +1,38 @@
+@model Group
+@{
+    Layout = "Dashboard/_Layout";
+}
+
+<section class="section">
+    <div class="section-body">
+        <div class="row">
+              <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Create New Group</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" asp-action="Store" asp-controller="Group">
+                            <div class="form-group">
+                                <label for="group-name">Name Group</label>
+                                <input id="group-name" type="text" asp-for="Name"  class="form-control"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/assets/js/app.min.js"></script>
+    <script src="~/assets/bundles/summernote/summernote-bs4.js"></script>
+    <script src="~/assets/bundles/codemirror/lib/codemirror.js"></script>
+    <script src="~/assets/bundles/codemirror/mode/javascript/javascript.js"></script>
+    <script src="~/assets/bundles/jquery-selectric/jquery.selectric.min.js"></script>
+
+    <script src="~/assets/js/page/index.js"></script>
+    <script src="~/assets/js/scripts.js"></script>
+}
